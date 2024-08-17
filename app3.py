@@ -45,14 +45,14 @@ st.title("")
 st.title("")
 
 # Definir a imagem de fundo (substitua 'background.jpg' pelo caminho do seu arquivo JPEG)
-set_jpeg_as_page_bg('/workspaces/guitarraessencial/fretnutapp.png')
+set_jpeg_as_page_bg('C:/Users/kayap/PycharmProjects/Fretnut App/Fretnut.venv/fretnutapp.png')
 
 # Função para listar arquivos WAV no diretório
 def listar_arquivos_wav(diretorio):
     return [f for f in os.listdir(diretorio) if f.endswith('.wav')]
 
 # Diretório contendo arquivos WAV
-diretorio_audio = '/workspaces/guitarraessencial/bruno kayapy guitarra essencial'
+diretorio_audio = 'C:/Users/kayap/OneDrive/Documentos/FretNut App/condabruno kayapy guitarra essencial'
 arquivos_wav = listar_arquivos_wav(diretorio_audio)
 
 # Manter estado atual da faixa
@@ -89,3 +89,4 @@ with col3:
     if st.button("Próxima Faixa"):
         atualizar_faixa(st.session_state.indice_faixa + 1)
 st.markdown('</div>', unsafe_allow_html=True)
+
