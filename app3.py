@@ -53,26 +53,21 @@ set_jpeg_as_page_bg('fretnutapp.png')
 
 # Função para listar arquivos WAV no diretório
 def listar_arquivos_wav(diretorio):
-    return [f for f in os.listdir(diretorio) if f.endswith('.wav')]
+    arquivos = [f for f in os.listdir(diretorio) if f.endswith('.wav')]
+    # Ordenar os arquivos numericamente assumindo que o nome do arquivo tem números
+    arquivos.sort(key=lambda x: int(x.split()[0])) 
+    return arquivos
 
 # Diretório contendo arquivos WAV
 diretorio_audio = 'bruno kayapy guitarra essencial'
 arquivos_wav = listar_arquivos_wav(diretorio_audio)
 
 # Manter estado atual da faixa
-if 'indice_faixa' not in st.session_state:
-    st.session_state.indice_faixa = 0
-
-# Função para atualizar a faixa atual
-def atualizar_faixa(indice):
-    if 0 <= indice < len(arquivos_wav):
-        st.session_state.indice_faixa = indice
-
-# Conteúdo do aplicativo
-st.markdown('<div class="player-container">', unsafe_allow_html=True)
+if 'faixa_selecionada' not in st.session_state:
+    st.session_state.faixa_selecionada = arquivos_wav[0]  # Iniciar com a primeira faixa
 
 # Exibir a faixa atual com texto branco
-faixa_atual = arquivos_wav[st.session_state.indice_faixa]
+faixa_atual = st.session_state.faixa_selecionada
 st.markdown(f"<p style='color: white;'>Reproduzindo: {faixa_atual}</p>", unsafe_allow_html=True)
 
 # Carregar e reproduzir a faixa atual
@@ -83,17 +78,8 @@ if os.path.exists(file_path):
 else:
     st.error(f"Arquivo de áudio {file_path} não encontrado.")
 
+# Adicionar a lista de reprodução
+st.markdown('<div class="playlist-container">', unsafe_allow_html=True)
+faixa_selecionada = st.selectbox('Selecione uma faixa', arquivos_wav, index=arquivos_wav.index(st.session_state.faixa_selecionada))
+st.session_state.faixa_selecionada = faixa_selecionada
 st.markdown('</div>', unsafe_allow_html=True)
-
-# Navegação entre faixas (posicionar os botões no centro horizontalmente)
-st.markdown('<div class="button-container">', unsafe_allow_html=True)
-col1, col2, col3 = st.columns([1, 2, 1])
-
-with col1:
-    if st.button("Faixa Anterior"):
-        atualizar_faixa(st.session_state.indice_faixa - 1)
-with col3:
-    if st.button("Próxima Faixa"):
-        atualizar_faixa(st.session_state.indice_faixa + 1)
-st.markdown('</div>', unsafe_allow_html=True)
-
